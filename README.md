@@ -10,3 +10,9 @@ After cloning reppository you must install the dependenties:
 <code>npm install</code>
 After that you can start application:
 <code>ng serve --open </code> 
+
+##Server catalog
+This catalog is example only for testing your webhooks. 
+To starting:
+1. npm install
+2. node app

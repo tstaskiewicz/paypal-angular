@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
   paypalConfig = {
     env: 'sandbox',
     client: {
-      sandbox: 'access_token$sandbox$wjgyhcypxztkn8z5$f60108844db1ebcad4eeed997b77d3bc',
+      sandbox:    'AX8KKyMUu_C3nhUSG8LgWKvO-pSh6J4jpkFZu7A-YPdoMpOvwhBjce9Rb04Si1uZiC3bgJ5sLFZuEBBe',
       production: '<your-production-key here>'
     },
     commit: true,
@@ -29,10 +29,17 @@ export class AppComponent implements OnInit {
     },
     onAuthorize: (data, actions) => {
       return actions.payment.execute().then((payment) => {
-        // Do something when payment is successful.
+        // payment is successful. //toDO: co jest w data? actions?
+        console.log(data, actions, payment);
+        // toDO: co, gdy nie powiodło się?
+        // toDO: jak przekazujemy informacje o tym, KTO płaci?
         alert('Payment is finished succesfully');
       });
-    }
+    },
+    onCancel: (data, actions) => {
+      console.log(data, actions);
+      alert('Payment is cancelled');
+  }
   };
 
 
