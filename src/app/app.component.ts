@@ -10,43 +10,43 @@ declare let paypal: any;
 export class AppComponent implements OnInit {
 
   finalAmount = 1;
+  serverURL = 'http://localhost:1199';
 
   paypalConfig = {
     env: 'sandbox',
     client: {
-      sandbox:    'AX8KKyMUu_C3nhUSG8LgWKvO-pSh6J4jpkFZu7A-YPdoMpOvwhBjce9Rb04Si1uZiC3bgJ5sLFZuEBBe',
+      sandbox: 'AX8KKyMUu_C3nhUSG8LgWKvO-pSh6J4jpkFZu7A-YPdoMpOvwhBjce9Rb04Si1uZiC3bgJ5sLFZuEBBe',
       production: '<your-production-key here>'
     },
     commit: true,
     payment: (data, actions) => {
-      return actions.payment.create({
-        payment: {
-          transactions: [
-            { amount: { total: this.finalAmount, currency: 'EUR' } }
-          ]
-        }
-      });
+      return actions.request.post(this.serverURL + '/my-api/create-payment/')
+        .then(function (res) {
+          return res.id;
+        });
     },
     onAuthorize: (data, actions) => {
-      return actions.payment.execute().then((payment) => {
-        // payment is successful. //toDO: co jest w data? actions?
-        console.log(data, actions, payment);
-        // toDO: co, gdy nie powiodło się?
-        // toDO: jak przekazujemy informacje o tym, KTO płaci?
-        alert('Payment is finished succesfully');
+      return actions.request.post(this.serverURL + '/my-api/execute-payment/', {
+        paymentID: data.paymentID,
+        payerID: data.payerID
+      }).then(res => {
+        // payment is completed succesfully
+        actions.payment.execute().then(() =>
+          alert('Payment is finished successfully!'));
       });
     },
     onCancel: (data, actions) => {
-      console.log(data, actions);
-      alert('Payment is cancelled');
-  }
+      // payment is canceled / break
+      actions.close().then(() =>
+          alert('Payment is cancelled!'));
+    }
   };
 
 
   ngOnInit() {
-      this.addPaypalScript().then(() => {
-        paypal.Button.render(this.paypalConfig, '#paypal-checkout-btn');
-      });
+    this.addPaypalScript().then(() => {
+      paypal.Button.render(this.paypalConfig, '#paypal-checkout-btn');
+    });
   }
 
   addPaypalScript() {
