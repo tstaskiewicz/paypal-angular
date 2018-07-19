@@ -59,7 +59,7 @@ app.post('/my-api/execute-payment/', function (req, res) {
   //variable to save in Db
   var productID = req.body.productID;
   var customerID = req.body.customerID;
-  console.log(productID + " is buying by "+ customerID);
+  console.log('Product ' + productID + " is buying by customer with ID:"+ customerID);
 
   // Call /v1/payments/payment/PAY-XXX/execute to finalize the payment.
   http.post(PAYPAL_API + '/v1/payments/payment/' + paymentID + '/execute', {
