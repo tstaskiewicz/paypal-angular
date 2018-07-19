@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
       sandbox: 'AX8KKyMUu_C3nhUSG8LgWKvO-pSh6J4jpkFZu7A-YPdoMpOvwhBjce9Rb04Si1uZiC3bgJ5sLFZuEBBe',
       production: '<your-production-key here>'
     },
-    commit: true,
+    commit: true, // Visibility of total amount in paypal-box
     payment: (data, actions) => {
       return actions.request.post(this.serverURL + '/my-api/create-payment/')
         .then(function (res) {
@@ -28,7 +28,10 @@ export class AppComponent implements OnInit {
     onAuthorize: (data, actions) => {
       return actions.request.post(this.serverURL + '/my-api/execute-payment/', {
         paymentID: data.paymentID,
-        payerID: data.payerID
+        payerID: data.payerID,
+        // my important variable (below)
+        customerID: '012345',
+        productID: 'd44ff20aad'
       }).then(res => {
         // payment is completed succesfully
         actions.payment.execute().then(() =>
